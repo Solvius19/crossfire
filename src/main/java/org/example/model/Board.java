@@ -11,11 +11,7 @@ public class Board {
         setupValues();
     }
 
-    public Question[][] getBoard() {
-        return boardState;
-    }
-
-    public Question getBoard(int row, int col) {
+    public Question getQuestion(int row, int col) {
         return boardState[row][col];
     }
 

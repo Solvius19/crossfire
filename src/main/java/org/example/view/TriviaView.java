@@ -12,29 +12,28 @@ public class TriviaView {
 
     private static final Scanner input = new Scanner(System.in);
 
-    public static ArrayList<Player> generatePlayers(){
+    public static ArrayList<Player> generatePlayers() {
         ArrayList<Player> players = new ArrayList<>();
-        System.out.println("How many players? (1-4)");
-        while (input.hasNext()) {
-            if (input.hasNextInt()) {
-                break;
+        int playerCount = 0;
+        System.out.print("How many players? (1-4): ");
+        while (true) {
+            int choice = input.nextInt();
+            if (choice < 1 || choice > 4) {
+                System.out.println("Invalid choice. Please choose again.");
             } else {
-                System.out.println("Invalid input. Please enter a number between 1 and 4.");
-                input.next();
+                playerCount = choice;
+                break;
             }
         }
-        int choice = input.nextInt();
-        if (choice < 1 || choice > 4) {
-            System.out.println("Invalid choice. Please choose again.");
-        }
         input.nextLine();
-        for (int i = 0; i < choice; i++) {
+        for (int i = 0; i < playerCount; i++) {
             System.out.print("Enter player " + (i + 1) + " name: ");
             String name = input.nextLine();
             players.add(new Player(name));
         }
         return players;
     }
+
     public static void printBoard(Board board) {
         System.out.println();
         if (board == null) {
@@ -69,7 +68,7 @@ public class TriviaView {
         for (int r = 0; r < rows; r++) {
             System.out.print(r + 1 + " | ");
             for (int c = 0; c < cols; c++) {
-                Question q = board.getBoard(r, c);
+                Question q = board.getQuestion(r, c);
                 if (q == null) {
                     System.out.print(OutputUtil.centerString("", colWidth) + " | ");
                 } else {
@@ -89,22 +88,26 @@ public class TriviaView {
         if (!choice.equalsIgnoreCase("y")) {
             return 7;
         }
-
-        System.out.println("Choose an attack:");
-        System.out.println("1. Block Out (-100 points)");
-        System.out.println("2. Scramble (-200 points)");
-        System.out.println("3. Skip Turn (-300 points)");
-        System.out.println("4. Select Next Question (-500 points)");
-        System.out.println("5. Tax (-700 points)");
-        System.out.println("6. Swap Scores (-2000 points)");
-        System.out.println("7. No attack");
-
-        int menuChoice = input.nextInt();
-        input.nextLine();
-        return menuChoice;
+        while (true) {
+            System.out.println("1. Block Out (-100 points)");
+            System.out.println("2. Scramble (-200 points)");
+            System.out.println("3. Skip Turn (-300 points)");
+            System.out.println("4. Select Next Question (-500 points)");
+            System.out.println("5. Tax (-700 points)");
+            System.out.println("6. Swap Scores (-2000 points)");
+            System.out.println("7. No attack");
+            System.out.println("Please select an attack (1-7): ");
+            int menuChoice = input.nextInt();
+            input.nextLine();
+            if (menuChoice < 1 || menuChoice > 7) {
+                System.out.println("Invalid choice. Please choose again.");
+            } else {
+                return menuChoice;
+            }
+        }
     }
 
-    public static boolean askQuestion(Question question, Player player, AttackType attack) {
+    public static boolean askQuestion(Question question, AttackType attack) {
         String modifiedQuestion = Attack.modify(question.getQuestion(), attack);
         System.out.println("Category: " + question.getCategory());
         System.out.println("Question: " + modifiedQuestion);
@@ -125,23 +128,37 @@ public class TriviaView {
         return correct;
     }
 
-    public static int[] pickQuestion(){
+    public static int[] pickQuestion() {
+        try {
             System.out.print("Enter row (1-5) and column (1-6) of the question you want to answer (e.g., 2 3): ");
             int row = input.nextInt() - 1;
             int col = input.nextInt() - 1;
             input.nextLine();
 
             return new int[]{row, col};
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter two integers separated by a space.");
+            input.nextLine();
+            return pickQuestion();
+        }
     }
 
     public static Player selectPlayer(List<Player> players, Player buyer) {
-        System.out.println("Select a player to interact with:");
-        for (int i = 0; i < players.size(); i++) {
-            System.out.println((i + 1) + ". " + players.get(i).getName());
+        while (true) {
+            System.out.println("Select a player to swap scores with:");
+            for (int i = 0; i < players.size(); i++) {
+                if (!players.get(i).equals(buyer)) {
+                    System.out.println((i + 1) + ". " + players.get(i).getName());
+                }
+            }
+            System.out.print("Enter your choice (1-" + players.size() + "): ");
+            int choice = input.nextInt();
+            input.nextLine();
+            if (choice < 1 || choice > players.size() || players.get(choice - 1).equals(buyer)) {
+                System.out.println("Invalid choice. Please choose again.");
+            } else {
+                return players.get(choice - 1);
+            }
         }
-        System.out.print("Enter your choice (1-" + players.size() + "): ");
-        int choice = input.nextInt();
-        input.nextLine();
-        return players.get(choice - 1);
     }
 }

@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 public class BoardBuildEngine {
 
-    private static final int[] VALID_CATEGORY_IDS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Question[][] BOARD = new Question[5][6];
 
@@ -206,7 +205,7 @@ public class BoardBuildEngine {
     }
 
     private static String fetchJson(int category, String difficulty) {
-        StringBuilder url = new StringBuilder("https://opentdb.com/api.php?amount=20&type=multiple&category=")
+        StringBuilder url = new StringBuilder("https://opentdb.com/api.php?amount=25&type=multiple&category=")
                 .append(category);
         if (difficulty != null && !difficulty.isBlank()) {
             url.append("&difficulty=").append(difficulty);

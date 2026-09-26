@@ -46,12 +46,13 @@ public class TriviaController {
 
         System.out.println(player.getName() + "'s turn!");
         System.out.println("Current score: " + player.getCurrentScore());
+        System.out.println("Current streak: " + player.getCurrentStreak() + " (Multiplier: x" + player.getCurrentStreakMultiplier() + ")");
 
         TriviaView.printBoard(game.getBoard());
         Question currentQuestion = identifyQuestion(player, pending);
         AttackType textEffect = identifyTextEffect(pending);
 
-        boolean correct = TriviaView.askQuestion(currentQuestion, player, textEffect);
+        boolean correct = TriviaView.askQuestion(currentQuestion, textEffect);
         applyScoreChange(player, currentQuestion, correct);
 
         if (isTax(pending)) {
@@ -83,8 +84,14 @@ public class TriviaController {
             System.out.println(player.getName() + "'s question was chosen for them!");
             return pending.selectedQuestion();
         }
-        int[] location = TriviaView.pickQuestion();
-        return game.getBoard().getBoard(location[0], location[1]);
+        while (true){
+                int[] location = TriviaView.pickQuestion();
+                if (game.getBoard().isValid(location[0], location[1]) && !game.getBoard().isEmpty(location[0], location[1])) {
+                    return game.getBoard().getQuestion(location[0], location[1]);
+                } else {
+                    System.out.println("Invalid selection. Please choose a valid question.");
+                }
+        }
     }
 
     private static AttackType identifyTextEffect(Game.PendingAttack pending) {
@@ -130,7 +137,7 @@ public class TriviaController {
         if (attack == AttackType.SELECT_NEXT) {
             TriviaView.printBoard(game.getBoard());
             int[] location = TriviaView.pickQuestion();
-            Question chosen = game.getBoard().getBoard(location[0], location[1]);
+            Question chosen = game.getBoard().getQuestion(location[0], location[1]);
             game.queueAttack(attack, buyer, target, chosen);
         } else {
             game.queueAttack(attack, buyer, target, null);
