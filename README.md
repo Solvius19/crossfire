@@ -1,4 +1,4 @@
-# Trivia Game
+# Crossfire
 A competitive trivia game to play with friends.
 
 # About this project
@@ -16,6 +16,9 @@ Key features:
 
 # Getting started
 To play, simply clone the project to your local computer, and you should be ready to go!
+```bash
+git clone https://github.com/Solvius19/trivia_game.git
+```
 
 # Future Plans
 - Add a final round to help assist late-game comebacks
