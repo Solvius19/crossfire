@@ -43,7 +43,7 @@ public class OutputUtil {
         return " ".repeat(leftPadding) + s + " ".repeat(rightPadding);
     }
 
-    public static String color(int color, String param){
+    public static String colorModify(int color, String param){
         return switch (color) {
             case 1 -> "\u001B[31m" + param + "\u001B[0m";
             case 2 -> "\u001B[32m" + param + "\u001B[0m";

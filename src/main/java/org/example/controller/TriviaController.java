@@ -36,7 +36,7 @@ public class TriviaController {
     private static void doTurn(Player player) {
         OutputUtil.clear();
 
-        Game.PendingAttack pending = consumePendingAttack(player);
+        Game.PendingAttack pending = clearPendingAttack(player);
 
         if (isSkipped(pending)) {
             System.out.println(player.getName() + "'s turn was skipped!");
@@ -48,12 +48,11 @@ public class TriviaController {
         System.out.println("Current score: " + player.getCurrentScore());
 
         TriviaView.printBoard(game.getBoard());
-
-        Question currentQuestion = resolveQuestion(player, pending);
-        AttackType textEffect = resolveTextEffect(pending);
+        Question currentQuestion = identifyQuestion(player, pending);
+        AttackType textEffect = identifyTextEffect(pending);
 
         boolean correct = TriviaView.askQuestion(currentQuestion, player, textEffect);
-        applyScoring(player, currentQuestion, correct);
+        applyScoreChange(player, currentQuestion, correct);
 
         if (isTax(pending)) {
             Attack.tax(correct, pending.attacker(), player, currentQuestion.getValue());
@@ -61,13 +60,13 @@ public class TriviaController {
 
         game.getBoard().removeQuestion(currentQuestion);
         OutputUtil.enterToClear();
-        offerAttackPurchase(player);
+        attackPurchase(player);
         OutputUtil.enterToClear();
     }
 
-    private static Game.PendingAttack consumePendingAttack(Player player) {
-        Game.PendingAttack pending = game.getPendingAttackFor(player);
-        game.clearPendingAttackFor(player);
+    private static Game.PendingAttack clearPendingAttack(Player player) {
+        Game.PendingAttack pending = game.getPendingAttack(player);
+        game.clearPendingAttack(player);
         return pending;
     }
 
@@ -79,7 +78,7 @@ public class TriviaController {
         return pending != null && pending.type() == AttackType.TAX;
     }
 
-    private static Question resolveQuestion(Player player, Game.PendingAttack pending) {
+    private static Question identifyQuestion(Player player, Game.PendingAttack pending) {
         if (pending != null && pending.type() == AttackType.SELECT_NEXT) {
             System.out.println(player.getName() + "'s question was chosen for them!");
             return pending.selectedQuestion();
@@ -88,14 +87,14 @@ public class TriviaController {
         return game.getBoard().getBoard(location[0], location[1]);
     }
 
-    private static AttackType resolveTextEffect(Game.PendingAttack pending) {
+    private static AttackType identifyTextEffect(Game.PendingAttack pending) {
         if (pending != null && (pending.type() == AttackType.BLOCK_OUT || pending.type() == AttackType.SCRAMBLE)) {
             return pending.type();
         }
         return null;
     }
 
-    private static void applyScoring(Player player, Question currentQuestion, boolean correct) {
+    private static void applyScoreChange(Player player, Question currentQuestion, boolean correct) {
         if (correct) {
             player.addScore(currentQuestion.getValue());
             player.incrementStreak();
@@ -105,9 +104,9 @@ public class TriviaController {
         }
     }
 
-    private static void offerAttackPurchase(Player buyer) {
+    private static void attackPurchase(Player buyer) {
         int choice = TriviaView.attackMenu(buyer);
-        AttackType attack = resolveAttack(choice);
+        AttackType attack = identifyAttack(choice);
 
         if (attack == AttackType.NONE) {
             return;
@@ -138,7 +137,7 @@ public class TriviaController {
         }
     }
 
-    private static AttackType resolveAttack(int choice) {
+    private static AttackType identifyAttack(int choice) {
         return switch (choice) {
             case 1 -> AttackType.BLOCK_OUT;
             case 2 -> AttackType.SCRAMBLE;

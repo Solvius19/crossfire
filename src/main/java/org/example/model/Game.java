@@ -48,14 +48,14 @@ public class Game {
         this.pendingAttack = new PendingAttack(type, attacker, target, selectedQuestion);
     }
 
-    public PendingAttack getPendingAttackFor(Player player) {
+    public PendingAttack getPendingAttack(Player player) {
         if (pendingAttack != null && pendingAttack.target() == player) {
             return pendingAttack;
         }
         return null;
     }
 
-    public void clearPendingAttackFor(Player player) {
+    public void clearPendingAttack(Player player) {
         if (pendingAttack != null && pendingAttack.target() == player) {
             pendingAttack = null;
         }

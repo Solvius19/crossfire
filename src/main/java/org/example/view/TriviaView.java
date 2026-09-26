@@ -53,7 +53,7 @@ public class TriviaView {
             String category = board.getCategoryForColumn(c);
             String centered = OutputUtil.centerString(category, colWidth);
             centeredCategories[c] = centered;
-            System.out.print(OutputUtil.color(c + 1, centered + " | "));
+            System.out.print(OutputUtil.colorModify(c + 1, centered + " | "));
         }
         System.out.println();
 
