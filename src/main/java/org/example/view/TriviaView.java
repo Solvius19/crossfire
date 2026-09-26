@@ -14,7 +14,7 @@ public class TriviaView {
 
     public static ArrayList<Player> generatePlayers() {
         ArrayList<Player> players = new ArrayList<>();
-        int playerCount = 0;
+        int playerCount;
         System.out.print("How many players? (1-4): ");
         while (true) {
             int choice = input.nextInt();
