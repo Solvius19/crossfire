@@ -17,7 +17,7 @@ Key features:
 # Getting started
 To play, simply clone the project to your local computer, and you should be ready to go!
 ```bash
-git clone https://github.com/Solvius19/trivia_game.git
+git clone https://github.com/Solvius19/crossfire.git
 ```
 
 # Future Plans
