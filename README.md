@@ -19,6 +19,7 @@ Key features:
 - Java 26
 - Maven
 - Jackson-Core (for reading JSON)
+- Git (and GitHub)
 
 ## Getting started
 To play, simply clone the project to your local computer, and you should be ready to go!
