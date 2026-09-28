@@ -8,6 +8,12 @@ This project utilizes the OpenTDB database in order to allow players to engage i
 Key features:
 - Local multiplayer and turn-based system
 - Features a variety of attack options in order to make the game more challenging
+  - BLOCK_OUT - Hash Out Next Question's Words
+  - SCRAMBLE - Scramble Letters in Next Question's Words
+  - SKIP - Skip Next Player's Turn
+  - SELECT_NEXT - Pick Next Question (Blinded)
+  - TAX - Tax Next Player
+  - SWAP - Swap Points
 
 ## Built with
 - Java 26
